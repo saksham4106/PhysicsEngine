@@ -2,6 +2,8 @@ package renderer;
 
 import game.GameObject;
 import game.Window;
+import org.joml.Matrix2d;
+import org.joml.Matrix2f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import utils.Assets;
@@ -199,6 +201,8 @@ public class RenderBatch implements Comparable<RenderBatch> {
         }
 
         // Add vertices with the appropriate properties
+        double theta = gameObject.getDirection();
+        Matrix2d rotationMatrix = new Matrix2d(Math.cos(theta), -Math.sin(theta), Math.sin(theta), Math.cos(theta));
 
         for (int i = 0; i < 4; i++) {
             float xAdd = 0.0f;
@@ -211,11 +215,17 @@ public class RenderBatch implements Comparable<RenderBatch> {
             } else if (i == 3) {
                 yAdd = 1.0f;
             }
+            Vector2f pos = new Vector2f();
+//            pos.x = gameObject.getTransform().position.x + (xAdd * gameObject.getTransform().scale.x);
+//            pos.y = gameObject.getTransform().position.y + (yAdd * gameObject.getTransform().scale.y);
+            pos.x = (xAdd * gameObject.getTransform().scale.x) - gameObject.getTransform().scale.x / 2;
+            pos.y = (yAdd * gameObject.getTransform().scale.y) - gameObject.getTransform().scale.y / 2;
 
+            pos = pos.mul(rotationMatrix);
             // Load position
-            vertices[offset] = gameObject.getTransform().position.x + (xAdd * gameObject.getTransform().scale.x);
-            vertices[offset + 1] = gameObject.getTransform().position.y + (yAdd * gameObject.getTransform().scale.y);
-
+            vertices[offset] = pos.x + gameObject.getTransform().position.x + gameObject.getTransform().scale.x / 2;
+            vertices[offset + 1] = pos.y + gameObject.getTransform().position.y + gameObject.getTransform().scale.y / 2;
+            gameObject.vertices[i] = new Vector2f(vertices[offset], vertices[offset + 1]);
             // Load color
             vertices[offset + 2] = color.x;
             vertices[offset + 3] = color.y;

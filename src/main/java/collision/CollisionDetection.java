@@ -1,6 +1,8 @@
 package collision;
 
 import game.Transform;
+import org.joml.Vector2f;
+import utils.Utils;
 
 public class CollisionDetection {
 
@@ -13,6 +15,21 @@ public class CollisionDetection {
         return pointInBox(point.getX(), point.getY(), transform.position.x, transform.position.y,
                 transform.scale.x, transform.scale.y);
     }
+//
+    public static boolean pointInBox(Vector2f point, Vector2f p1, Vector2f p2, Vector2f p3, Vector2f p4){
+        float tolerance = 0.1f;
+        float area_rect = Utils.area_rect(p1, p2,p3,p4);
+        float calc_area = Utils.area_triangle(point, p1, p2) + Utils.area_triangle(point, p1, p4)
+                + Utils.area_triangle(point, p2, p3) + Utils.area_triangle(point, p3, p4);
+
+        return Math.abs(area_rect - calc_area) <= 0.1f;
+    }
+//    // center
+//    public static boolean pointInBox(float pointX, float pointY, float boxX, float boxY, float boxWidth, float boxHeight,
+//                                     double theta) {
+//
+//    }
+
 
     public static boolean boxInBox(Transform box1, Transform box2) {
         return boxInBox(box1.position.x, box1.position.y, box1.scale.x, box1.scale.y,

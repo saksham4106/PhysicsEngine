@@ -3,6 +3,7 @@ package utils;
 import org.joml.Vector4f;
 
 import java.awt.*;
+import java.util.Vector;
 
 public class ColorUtils {
 
@@ -15,6 +16,11 @@ public class ColorUtils {
     public static Vector4f getColor(Color color){
         return getColor(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
+
+    public static Vector4f getColor(float f){
+        return new Vector4f(f,f,f, 1);
+    }
+
 
     public static Vector4f shadeColorWithoutAlpha(Vector4f color, float shade){
         Vector4f shadedColor = new Vector4f(color).mul(shade);

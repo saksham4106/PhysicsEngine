@@ -1,5 +1,7 @@
 package callback;
 
+import events.EventBus;
+import events.MouseClickEvent;
 import game.Camera;
 import game.Window;
 import org.joml.Matrix4f;
@@ -18,7 +20,8 @@ public class MouseEventListener {
 
     public static void mouseButtonCallback(long window, int button, int action, int mods) {
         mouseKeys[button] = action == GLFW_PRESS;
-//        EventBus.invoke(new MouseClickEvent(button, action, mods));
+
+        EventBus.invoke(new MouseClickEvent(button, action, mods));
     }
 
     public static boolean isMouseButtonPressed(int button){
@@ -36,7 +39,7 @@ public class MouseEventListener {
         MouseEventListener.yPos = (float)yPos;
     }
 
-    public static Vector2f getWorld() {
+    public static Vector2f getWorldCoord() {
 //        float currentX = xPos;
 //        currentX = (2.0f * (currentX / Window.width)) - 1.0f;
 //        float currentY = yPos;

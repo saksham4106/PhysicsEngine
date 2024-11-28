@@ -3,6 +3,8 @@ package utils;
 import callback.MouseEventListener;
 import collision.CollisionDetection;
 import game.Transform;
+import jdk.jshell.execution.Util;
+import org.joml.Matrix3f;
 import org.joml.Vector2f;
 import renderer.Sprite;
 
@@ -34,6 +36,7 @@ public class Utils {
                 position.x, position.y, scale.x, scale.y );
     }
 
+
     public static String capitalize(String str){
         String[] words = str.split(" ");
         for (int i = 0; i < words.length; i++){
@@ -61,6 +64,14 @@ public class Utils {
         Sprite output = new Sprite(sprite);
         output.setTexCoords(new Vector2f[]{prevTex[1], prevTex[0], prevTex[3], prevTex[2]});
         return output;
+    }
+
+    public static float area_triangle(Vector2f p1, Vector2f p2, Vector2f p3){
+        float det = Math.abs((new Matrix3f(p1.x, p1.y, 1, p2.x, p2.y, 1, p3.x, p3.y, 1)).determinant());
+        return det / 2;
+    }
+    public static float area_rect(Vector2f p1, Vector2f p2, Vector2f p3, Vector2f p4){
+        return Utils.area_triangle(p1,p2,p3) + Utils.area_triangle(p1,p3,p4);
     }
 
 

@@ -1,10 +1,10 @@
 package scenes;
 
-import entity.PlayerEntity;
 import game.Camera;
 import game.GameObject;
 import game.Transform;
 import game.Window;
+import objects.RigidBody;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 import renderer.Renderer;
@@ -12,15 +12,18 @@ import renderer.Sprite;
 import renderer.Texture;
 import ui.ButtonObject;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class Scene {
 
     public Set<GameObject> sceneGameObjects;
-    public static PlayerEntity player;
+    public Set<RigidBody> rigidBodies;
+//    public static PlayerEntity player;
 
     public Renderer renderer;
     public Camera camera = new Camera(new Vector2f(0, 0));
+
 
     public boolean throwaway = false;
     public String sceneName;
@@ -28,6 +31,7 @@ public abstract class Scene {
     public Scene(){
         this.renderer = new Renderer();
         this.sceneGameObjects = new HashSet<>();
+        this.rigidBodies = new HashSet<>();
     }
 
     public void addGameObjectToScene(GameObject gameObject){
@@ -37,7 +41,13 @@ public abstract class Scene {
         else{
             this.renderer.add(gameObject);
         }
+
         this.sceneGameObjects.add(gameObject);
+    }
+
+    public void addPhysicsObjectToScene(RigidBody rigidBody){
+        this.addGameObjectToScene(rigidBody.object);
+        this.rigidBodies.add(rigidBody);
     }
 
     public void addGameObjectstoScene(GameObject... gameObjects){
@@ -80,11 +90,12 @@ public abstract class Scene {
             gameObjects[i].update(dt, renderer);
         }
         this.renderer.render();
+
     }
 
-    public void destroy(){
-        if(throwaway) Window.removeScene(this.sceneName);
-    }
+//    public void destroy(){
+//        if(throwaway) Window.removeScene(this.sceneName);
+//    }
 
     public void clearScene(){
         this.renderer.clear();
@@ -95,10 +106,15 @@ public abstract class Scene {
     (Tick method of a gameObject might modify the list sceneGameObjects)
      */
     @SuppressWarnings("ForLoopReplaceableByForEach")
-    public void tick(){
+    public void tick(float dt){
         GameObject[] gameObjects = sceneGameObjects.toArray(new GameObject[0]);
         for (int i = 0; i < gameObjects.length; i++) {
             gameObjects[i].tick();
+        }
+
+        RigidBody[] rigidBodies = this.rigidBodies.toArray(new RigidBody[0]);
+        for (int i = 0; i < rigidBodies.length; i++) {
+            rigidBodies[i].tick(dt);
         }
     }
 

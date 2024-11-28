@@ -11,7 +11,6 @@ import org.joml.Vector4f;
 import renderer.Renderer;
 import renderer.Sprite;
 import utils.Assets;
-import collision.CollisionDetection;
 import utils.ColorUtils;
 import utils.MathUtil;
 import utils.Utils;
@@ -44,7 +43,7 @@ public class ButtonObject extends GameObject {
     }
 
     public ButtonObject(float startX, float startY, String label, float scale, IClickable onClick, Sprite sprite, int zIndex){
-        this(startX, startY, label, scale, onClick, sprite, zIndex, Fonts.OPEN_SANS_FONT, ColorUtils.BLACK);
+        this(startX, startY, label, scale, onClick, sprite, zIndex, Fonts.ATARI_CLASSIC_FONT, ColorUtils.BLACK);
     }
 
     public ButtonObject(float startX, float startY, String label, float scale, IClickable onClick, Sprite sprite, int zIndex,
@@ -101,7 +100,7 @@ public class ButtonObject extends GameObject {
         }
     }
 
-    int cooldown = 100;
+    int cooldown = 10;
     @Override
     public void tick() {
         super.tick();
@@ -114,7 +113,7 @@ public class ButtonObject extends GameObject {
             this.onClick.onClick();
             Sound sound = Assets.getSound("assets/sounds/buttonpress.ogg", new Sound("assets/sounds/buttonpress.ogg", false));
             sound.play();
-            cooldown = 100;
+            cooldown = 10;
         }
 
     }

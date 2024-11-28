@@ -17,6 +17,10 @@ public class GameObject {
     public int zIndex;
     public boolean isCollidable = false;
 
+    public Vector2f[] vertices = new Vector2f[4];
+
+    public double direction = 0;
+
     public GameObject(Transform transform, Sprite sprite, int zIndex, boolean isUIElement){
         this.sprite = sprite;
         this.zIndex = zIndex;
@@ -139,6 +143,12 @@ public class GameObject {
         this.markDirty(true);
     }
 
+    public void addPosition(float x, float y){
+        if (x == 0 && y == 0) return;
+        this.transform.position.add(x,y);
+        this.markDirty(true);
+    }
+
     public void setTexture(Texture texture){
         this.sprite.texture = texture;
         this.markDirty(true);
@@ -150,5 +160,22 @@ public class GameObject {
             this.markDirty(true);
         }
 
+    }
+
+    public double getDirection() {
+        return direction;
+    }
+
+    public Vector2f[] getVertices() {
+        return vertices;
+    }
+
+    public void addAngle(double angle){
+        this.direction += angle;
+        while(this.direction >= Math.PI * 2){
+            this.direction -= Math.PI * 2;
+        }
+
+        this.markDirty(true);
     }
 }

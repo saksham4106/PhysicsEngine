@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import renderer.Texture;
 import utils.Assets;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class FontLoader {
 
     public void parseFontFile(){
         String[] fontSource;
-        fontSource = Assets.readFileAsString(fontPath).split("\n");
+        fontSource = Assets.readFileAsString(fontPath).split(System.lineSeparator());
         for (String text : fontSource) {
             if (text.startsWith("common")) {
                 imageWidth = Integer.parseInt(getValue("scaleW", text));
@@ -37,7 +38,7 @@ public class FontLoader {
                 lineHeight = Integer.parseInt(getValue("lineHeight", text));
 
             } else if (text.startsWith("page")) {
-                imagePath = Paths.get(this.fontPath).getParent() + "/" + getValue("file", text);
+                imagePath = Paths.get(this.fontPath).getParent().toString().replace("\\", "/") + "/" + getValue("file", text);
 
             } else if (text.startsWith("char ")) {
                 int charID = Integer.parseInt(getValue("id", text));
